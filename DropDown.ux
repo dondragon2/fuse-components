@@ -1,0 +1,54 @@
+<Panel ux:Class="DropDown" Height="48" >
+  <object ux:Property="Object"/>
+
+  <UserEvent Name="MyEvent"/>
+  <Select Data="{Property this.Object}">
+    <OnUserEvent EventName="MyEvent" Handler="{callback}" />
+  </Select>
+
+  <Panel ux:Class="DropdownOption" ux:Name="self" Height="48">
+    <Rectangle Fill="#fff" Layer="Background"/>
+    <string ux:Property="Text" />
+    <Text Value="{Property self.Text}" FontSize="16" Font="RobotoRegular" Margin="16,0,16,20"/>
+  </Panel>
+
+  <Panel ux:Class="DropdownSelectedItem" ux:Name="self" Alignment="CenterLeft" Height="40" Width="100%" HitTestMode="LocalBounds" >
+    <string ux:Property="Text" />
+    <Text  Value="{Property self.Text}" FontSize="16" Font="RobotoRegular" Alignment="CenterLeft"/>
+  </Panel>
+
+  <Panel Width="200" Height="48">
+    <Grid Columns="2*,auto">
+      <Panel>
+      <Clicked>
+        <Toggle Target="expandDropdown" />
+      </Clicked>
+        <Select Data="{Property this.Object}">
+          <DropdownSelectedItem Text="{selected}"/>
+        </Select>
+        <WhileTrue ux:Name="expandDropdown">
+          <StackPanel ux:Name="list">
+            <Panel Height="8">
+              <Rectangle Fill="#fff" Layer="Background"/>
+            </Panel>
+            <Select Data="{Property this.Object}">
+              <Each Items="{options}">
+                <DropdownOption Text="{value}" >
+                  <Clicked>
+                    <RaiseUserEvent Name="MyEvent">
+                      <UserEventArg Name="key" StringValue="{key}"/>
+                    </RaiseUserEvent>
+                  </Clicked>
+                </DropdownOption>
+              </Each>
+            </Select>
+            <DropShadow/>
+          </StackPanel>
+          <BringToFront Target="list"/>
+          <Change Target="caret.Visibility" Value="Collapsed"/>
+        </WhileTrue>
+      </Panel>
+      <fa-caret-down ux:Name="caret" Alignment="CenterRight" Color="#767676"/>
+    </Grid>
+  </Panel>
+</Panel>

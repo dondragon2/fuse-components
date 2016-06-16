@@ -1,0 +1,74 @@
+<App>
+  <ux:Include File="FontAwesome.ux" />
+  <Font File="Roboto-Regular.ttf" ux:Global="RobotoRegular" />
+
+  <JavaScript>
+    var Observable = require("FuseJS/Observable");
+
+    var dropdown = Observable({
+        options : Observable({ value: "Red", key:"red", content: [1,0,0,1]} ,
+                            	{ value: "Green", key:"green", content: [0,1,0,1]} ,
+                            	{ value: "Blue", key:"blue", content: [0,0,1,1]}),
+        selected : Observable("Red"),
+        callback : function(arg){
+            var options = dropdown.value.options.toArray();
+
+            var found;
+            for(var i=0; i < options.length;i++){
+              if(options[i].key === arg.key){
+                found = options[i];
+                break;
+              }
+            }
+
+            if(found){
+              dropdown.value.selected.value = found.value;
+              selectedColor.value = found.content;
+            }
+
+          }
+      });
+    var dropdown2 = Observable({
+        options : Observable(	{ value: "Yellow", key:"yellow", content: [1,1,0,1]} ,
+                            	{ value: "Teal",key:"teal", content: [0,1,1,1]} ,
+                            	{ value: "Magenta", key:"magenta", content: [1,0,1,1]}),
+        selected : Observable("Yellow"),
+        callback : function(arg){
+            var options = dropdown2.value.options.toArray();
+
+            var found;
+            for(var i=0; i < options.length;i++){
+              if(options[i].key === arg.key){
+                found = options[i];
+                break;
+              }
+            }
+
+            if(found){
+              dropdown2.value.selected.value = found.value;
+              selectedColor.value = found.content;
+            }
+          }
+      });
+
+    var selectedColor = Observable([1,0,0,1] );
+
+
+    module.exports = {
+      selectedColor: selectedColor,
+      dropdown: dropdown,
+      dropdown2: dropdown2
+    }
+
+  </JavaScript>
+
+  <StackPanel>
+    <Panel Height="40">
+      <SolidColor Color="{selectedColor}"/>
+    </Panel>
+
+    <DropDown Object="{dropdown}" />
+    <DropDown Object="{dropdown2}" />
+  </StackPanel>
+
+</App>
